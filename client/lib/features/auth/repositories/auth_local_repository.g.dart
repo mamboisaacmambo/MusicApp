@@ -13,15 +13,14 @@ String _$authLocalRepositoryHash() =>
 @ProviderFor(authLocalRepository)
 final authLocalRepositoryProvider =
     AutoDisposeProvider<AuthLocalRepository>.internal(
-      authLocalRepository,
-      name: r'authLocalRepositoryProvider',
-      debugGetCreateSourceHash:
-          const bool.fromEnvironment('dart.vm.product')
-              ? null
-              : _$authLocalRepositoryHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
+  authLocalRepository,
+  name: r'authLocalRepositoryProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$authLocalRepositoryHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element

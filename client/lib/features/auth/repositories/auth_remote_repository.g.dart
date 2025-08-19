@@ -13,15 +13,14 @@ String _$authRemoteRepositoryHash() =>
 @ProviderFor(authRemoteRepository)
 final authRemoteRepositoryProvider =
     AutoDisposeProvider<AuthRemoteRepository>.internal(
-      authRemoteRepository,
-      name: r'authRemoteRepositoryProvider',
-      debugGetCreateSourceHash:
-          const bool.fromEnvironment('dart.vm.product')
-              ? null
-              : _$authRemoteRepositoryHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
+  authRemoteRepository,
+  name: r'authRemoteRepositoryProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$authRemoteRepositoryHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element

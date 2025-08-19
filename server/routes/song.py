@@ -3,10 +3,12 @@ import cloudinary
 import cloudinary.uploader
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from sqlalchemy.orm import Session
+from models.favorite import Favorite
 from models.song import Song
 from database import get_db
 from middleware.auth_middleware import auth_middleware
-
+from pydantic_schemas.favorite_song import FavoriteSong
+from sqlalchemy.orm import joinedload
 router = APIRouter()
 
 cloudinary.config( 
@@ -47,3 +49,44 @@ def upload_song(
     except Exception as e:
         print(f"Error uploading files: {e}")
         raise HTTPException(400, "Error uploading files")
+
+
+@router.get("/list")
+def list_songs(db: Session = Depends(get_db), user_dict: dict = Depends(auth_middleware)):
+    songs = db.query(Song).all()
+    if not songs:
+        raise HTTPException(status_code=404, detail="No songs found")
+    return songs
+
+
+@router.post("/favorite")
+def favorite_song(
+    song:FavoriteSong,
+    db:Session = Depends(get_db),
+    auth_details: dict = Depends(auth_middleware)):
+    #check if song is already favorited by the user
+    user_id = auth_details['uid']
+    fav_song = db.query(Favorite).filter(Favorite.song_id == song.song_id, Favorite.user_id == user_id).first()
+    if fav_song:
+        db.delete(fav_song)
+        db.commit()
+        return {"message":False}
+    else:
+        new_fav = Favorite(
+            id=str(uuid.uuid4()),
+            user_id=user_id,
+            song_id=song.song_id
+        )
+        db.add(new_fav)
+        db.commit()
+        db.refresh(new_fav)
+        return {"message":True}
+
+@router.get("/list/favorites")
+def list_favorites(db: Session = Depends(get_db), user_dict: dict = Depends(auth_middleware)):
+    
+    user_id = user_dict['uid']
+    fav_songs = db.query(Favorite).filter(Favorite.user_id == user_id).options(joinedload()).all()
+    if not fav_songs:
+        raise HTTPException(status_code=404, detail="No songs found")
+    return fav_songs

@@ -38,7 +38,7 @@ class _SigninPageState extends ConsumerState<SigninPage> {
         data: (data) {
           Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => const SigninPage()),
+            MaterialPageRoute(builder: (context) => const HomePage()),
             (route) => false,
           );
         },
@@ -99,27 +99,10 @@ class _SigninPageState extends ConsumerState<SigninPage> {
                                       final result = await ref
                                           .read(authViewModelProvider.notifier)
                                           .loginUser(
-                                            email: _emailController.text,
-                                            password: _passwordController.text,
+                                            email: _emailController.text.trim(),
+                                            password:
+                                                _passwordController.text.trim(),
                                           );
-
-                                      Dialogues.showSuccessDialog(
-                                        context,
-                                        'Login successful! Redirecting to Home page.',
-                                        'Success',
-                                        () {
-                                          Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder:
-                                                  (context) => const HomePage(),
-                                            ),
-                                          );
-                                        },
-                                      );
-                                      print(
-                                        '${result} KOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOMAAAAAAAAAAAAAAA',
-                                      );
                                     } catch (e) {
                                       print("Err00or: $e");
                                     }

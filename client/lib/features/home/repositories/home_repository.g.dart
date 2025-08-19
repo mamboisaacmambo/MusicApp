@@ -13,10 +13,9 @@ String _$homeRepositoryHash() => r'0a08542f3cf9d0425f87a20b06020cdd03fa827f';
 final homeRepositoryProvider = AutoDisposeProvider<HomeRepository>.internal(
   homeRepository,
   name: r'homeRepositoryProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$homeRepositoryHash,
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$homeRepositoryHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );

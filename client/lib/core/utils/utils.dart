@@ -12,7 +12,11 @@ String rgbToHex(Color color) {
 }
 
 Color hexToColor(String hex) {
-  return Color(int.parse(hex, radix: 16) + 0xFF0000);
+  hex = hex.replaceFirst('#', ''); // Remove the # if present
+  if (hex.length == 6) {
+    hex = 'FF$hex'; // Add opacity if missing (FF = fully opaque)
+  }
+  return Color(int.parse(hex, radix: 16));
 }
 
 Future<File?> pickAudio() async {

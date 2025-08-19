@@ -71,7 +71,7 @@ class _SignupPageState extends ConsumerState<SignupPage> {
               ? Loader()
               : SingleChildScrollView(
                 child: Padding(
-                  padding: const EdgeInsets.all(15),
+                  padding: const EdgeInsets.only(top: 100, left: 15, right: 15),
                   child: Form(
                     key: _formKey,
                     child: Column(
@@ -108,9 +108,9 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                               final result = await ref
                                   .read(authViewModelProvider.notifier)
                                   .signupUser(
-                                    name: _nameController.text,
-                                    email: _emailController.text,
-                                    password: _passwordController.text,
+                                    name: _nameController.text.trim(),
+                                    email: _emailController.text.trim(),
+                                    password: _passwordController.text.trim(),
                                   );
                               print(result);
                             }

@@ -1,14 +1,25 @@
 import 'package:client/core/provider/current_user_notifier.dart';
 import 'package:client/features/auth/view/pages/signup_page.dart';
 import 'package:client/features/auth/viewmodel/auth_view_model.dart';
-import 'package:client/features/home/view/upload_song_page.dart';
+import 'package:client/features/home/models/song_model.dart';
+import 'package:client/features/home/view/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'core/theme/theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await JustAudioBackground.init(
+    androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
+    androidNotificationChannelName: 'Audio playback',
+    androidNotificationOngoing: true,
+  );
+  await Hive.initFlutter();
+  Hive.registerAdapter(SongModelAdapter());
+  await Hive.openBox<SongModel>('songs'); // Open the box for songs
   PaintingBinding.instance.imageCache.maximumSizeBytes =
       1024 * 1024 * 128; // 128MB
   final container = ProviderContainer();
@@ -44,7 +55,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       title: 'Music App',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.darkThemeMode,
-      home: currentUser == null ? const SignupPage() : const UploadSongPage(),
+      home: currentUser == null ? const SignupPage() : const HomePage(),
     );
   }
 }
