@@ -1,31 +1,51 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-class UserModel {
-  final String name;
-  final String email;
-  final String id;
-  final String token;
+import 'package:flutter/foundation.dart';
 
+import 'package:client/features/auth/model/fav_song_model.dart';
+import 'package:hive/hive.dart';
+part 'user_model.g.dart';
+
+@HiveType(typeId: 1)
+class UserModel extends HiveObject {
+  @HiveField(0)
+  final String name;
+  @HiveField(1)
+  final String email;
+  @HiveField(2)
+  final String id;
+  @HiveField(3)
+  final String token;
+  @HiveField(4)
+  final List<FavSongModel> favorites;
   UserModel({
     required this.name,
     required this.email,
     required this.id,
     required this.token,
+    required this.favorites,
   });
 
-  UserModel copyWith({String? token, String? name, String? email, String? id}) {
+  UserModel copyWith({
+    String? name,
+    String? email,
+    String? id,
+    String? token,
+    List<FavSongModel>? favorites,
+  }) {
     return UserModel(
       name: name ?? this.name,
       email: email ?? this.email,
       id: id ?? this.id,
       token: token ?? this.token,
+      favorites: favorites ?? this.favorites,
     );
   }
 
   @override
   String toString() {
-    return 'UserModel( name: $name, email: $email, id: $id,token: $token)';
+    return 'UserModel(name: $name, email: $email, id: $id, token: $token, favorites: $favorites)';
   }
 
   Map<String, dynamic> toMap() {
@@ -34,6 +54,7 @@ class UserModel {
       'email': email,
       'id': id,
       'token': token,
+      'favorites': favorites.map((x) => x.toMap()).toList(),
     };
   }
 
@@ -43,6 +64,11 @@ class UserModel {
       email: map['email'] ?? '',
       id: map['id'] ?? '',
       token: map['token'] ?? '',
+      favorites: List<FavSongModel>.from(
+        (map['favorites'] ?? []).map<FavSongModel>(
+          (x) => FavSongModel.fromMap(x as Map<String, dynamic>),
+        ),
+      ),
     );
   }
 
@@ -58,11 +84,16 @@ class UserModel {
     return other.name == name &&
         other.email == email &&
         other.id == id &&
-        other.token == token;
+        other.token == token &&
+        listEquals(other.favorites, favorites);
   }
 
   @override
   int get hashCode {
-    return token.hashCode ^ name.hashCode ^ email.hashCode ^ id.hashCode;
+    return name.hashCode ^
+        email.hashCode ^
+        id.hashCode ^
+        token.hashCode ^
+        favorites.hashCode;
   }
 }

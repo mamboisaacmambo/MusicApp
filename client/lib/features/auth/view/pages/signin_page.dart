@@ -1,5 +1,7 @@
 import 'package:client/core/utils/dialogues.dart';
 import 'package:client/core/widgets/loader.dart';
+import 'package:client/features/auth/repositories/auth_local_repository.dart';
+import 'package:client/features/auth/repositories/auth_remote_repository.dart';
 import 'package:client/features/auth/view/pages/signup_page.dart';
 import 'package:client/features/auth/viewmodel/auth_view_model.dart';
 import 'package:client/features/home/view/home_page.dart';
@@ -36,6 +38,7 @@ class _SigninPageState extends ConsumerState<SigninPage> {
     ref.listen(authViewModelProvider, (_, next) {
       next?.when(
         data: (data) {
+          ref.read(authLocalRepositoryProvider).addUserDetails(data);
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => const HomePage()),

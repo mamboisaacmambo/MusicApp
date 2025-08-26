@@ -1,6 +1,6 @@
 from sqlalchemy import TEXT, VARCHAR, Column
 from models.base import Base
-
+from sqlalchemy.orm import relationship
 
 class Song(Base):
     __tablename__ = 'songs'
@@ -10,3 +10,5 @@ class Song(Base):
     hex_code = Column(VARCHAR(7))
     audio_url = Column(TEXT)
     thumbnail_url = Column(TEXT)
+
+    favorites = relationship('Favorite')

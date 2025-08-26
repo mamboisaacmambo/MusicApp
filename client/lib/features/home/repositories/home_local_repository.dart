@@ -11,6 +11,7 @@ HomeLocalRepository homeLocalRepository(HomeLocalRepositoryRef ref) {
 
 class HomeLocalRepository {
   final box = Hive.box<SongModel>('songs');
+
   void uploadLocalSong(SongModel song) {
     box.put(song.id, song);
     print('Song uploaded locally: ${song.song_name}');

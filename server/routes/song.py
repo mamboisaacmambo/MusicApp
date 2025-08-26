@@ -86,7 +86,7 @@ def favorite_song(
 def list_favorites(db: Session = Depends(get_db), user_dict: dict = Depends(auth_middleware)):
     
     user_id = user_dict['uid']
-    fav_songs = db.query(Favorite).filter(Favorite.user_id == user_id).options(joinedload()).all()
+    fav_songs = db.query(Favorite).filter(Favorite.user_id == user_id).options(joinedload(Favorite.song)).all()
     if not fav_songs:
         raise HTTPException(status_code=404, detail="No songs found")
     return fav_songs

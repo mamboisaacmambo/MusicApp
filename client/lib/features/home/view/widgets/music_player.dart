@@ -2,6 +2,7 @@ import 'package:client/core/provider/current_song_notifier.dart';
 import 'package:client/core/theme/app_pallete.dart';
 import 'package:client/core/utils/utils.dart';
 import 'package:client/features/home/models/song_model.dart';
+import 'package:client/features/home/view_model/home_view_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -102,7 +103,11 @@ class MusicPlayer extends ConsumerWidget {
                                 ),
                               ),
                               IconButton(
-                                onPressed: () {},
+                                onPressed: () async {
+                                  await ref
+                                      .read(homeViewModelProvider.notifier)
+                                      .favSong(songId: current_song.id);
+                                },
                                 icon: Icon(
                                   Icons.favorite_border,
                                   color: Pallete.whiteColor,

@@ -10,7 +10,7 @@ from models.user import User
 from pydantic_schemas.user_create import UserCreate
 from fastapi import APIRouter
 from sqlalchemy.orm import Session
-
+from sqlalchemy.orm import joinedload
 from pydantic_schemas.user_login import UserGet
 router = APIRouter()
 @router.post('/signup',status_code=201)
@@ -49,7 +49,7 @@ def login_user(user:UserGet,db:Session=Depends(get_db)):
 
 @router.get('/')
 def get_user_data(db: Session = Depends(get_db),user_dict: dict = Depends(auth_middleware)):
-    user = db.query(User).filter(User.id == user_dict['uid']).first()
+    user = db.query(User).filter(User.id == user_dict['uid']).options(joinedload(User.favorites)).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return user

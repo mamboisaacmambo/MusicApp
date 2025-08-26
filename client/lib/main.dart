@@ -1,4 +1,5 @@
 import 'package:client/core/provider/current_user_notifier.dart';
+import 'package:client/features/auth/model/user_model.dart';
 import 'package:client/features/auth/view/pages/signup_page.dart';
 import 'package:client/features/auth/viewmodel/auth_view_model.dart';
 import 'package:client/features/home/models/song_model.dart';
@@ -19,6 +20,8 @@ void main() async {
   );
   await Hive.initFlutter();
   Hive.registerAdapter(SongModelAdapter());
+  Hive.registerAdapter(UserModelAdapter());
+  await Hive.openBox<UserModel>('user');
   await Hive.openBox<SongModel>('songs'); // Open the box for songs
   PaintingBinding.instance.imageCache.maximumSizeBytes =
       1024 * 1024 * 128; // 128MB

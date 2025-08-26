@@ -1,5 +1,6 @@
 import 'package:client/core/provider/current_song_notifier.dart';
 import 'package:client/core/theme/app_pallete.dart';
+import 'package:client/features/auth/repositories/auth_local_repository.dart';
 import 'package:client/features/home/view/library_page.dart';
 import 'package:client/features/home/view/songs_page.dart';
 import 'package:client/features/home/view/widgets/music_slab.dart';
@@ -19,9 +20,11 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final allLocalUsers = ref.watch(authLocalRepositoryProvider).getLocalUser();
     final screenHeight = MediaQuery.of(context).size.height;
     final currentSong = ref.watch(currentSongNotifierProvider);
-
+    print('All Users in Local');
+    print(allLocalUsers);
     return Scaffold(
       body: Stack(
         children: [

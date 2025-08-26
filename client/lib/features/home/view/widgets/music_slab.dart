@@ -1,7 +1,9 @@
 import 'package:client/core/provider/current_song_notifier.dart';
+import 'package:client/core/provider/current_user_notifier.dart';
 import 'package:client/core/theme/app_pallete.dart';
 import 'package:client/core/utils/utils.dart';
 import 'package:client/features/home/view/widgets/music_player.dart';
+import 'package:client/features/home/view_model/home_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -17,6 +19,9 @@ class _MusicSlabState extends ConsumerState<MusicSlab> {
   Widget build(BuildContext context) {
     final current_song = ref.watch(currentSongNotifierProvider);
     final song_notifier = ref.read(currentSongNotifierProvider.notifier);
+    final userFavorites = ref.watch(
+      currentUserNotifierProvider.select((data) => data!.favorites),
+    );
     bool isPressed = false;
     if (current_song == null) {
       return SizedBox();
@@ -86,18 +91,21 @@ class _MusicSlabState extends ConsumerState<MusicSlab> {
                       StatefulBuilder(
                         builder: (context, setState) {
                           return IconButton(
-                            icon:
-                                isPressed == true
-                                    ? Icon(
-                                      Icons.favorite,
-                                      color: Pallete.whiteColor,
-                                    )
-                                    : Icon(Icons.favorite_border),
-                            onPressed: () {
-                              // Handle skip previous action
-                              setState(() {
-                                isPressed = !isPressed;
-                              });
+                            icon: Icon(
+                              userFavorites
+                                      .where(
+                                        (fav) => fav.song_id == current_song.id,
+                                      )
+                                      .toList()
+                                      .isNotEmpty
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              color: Pallete.whiteColor,
+                            ),
+                            onPressed: () async {
+                              await ref
+                                  .read(homeViewModelProvider.notifier)
+                                  .favSong(songId: current_song.id);
                             },
                           );
                         },

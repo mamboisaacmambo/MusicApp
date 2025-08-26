@@ -16,12 +16,6 @@ class SongsPage extends ConsumerStatefulWidget {
 
 class _SongsPageState extends ConsumerState<SongsPage> {
   @override
-  void dispose() {
-    Hive.box('songs').close();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;

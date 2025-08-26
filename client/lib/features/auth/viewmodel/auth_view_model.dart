@@ -88,4 +88,8 @@ class AuthViewModel extends _$AuthViewModel {
     _currentUserNotifier.addUser(user);
     return state = AsyncValue.data(user);
   }
+
+  List<UserModel> getAllLocalUsers() {
+    return _authLocalRepository.getLocalUser();
+  }
 }
