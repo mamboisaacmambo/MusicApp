@@ -13,7 +13,12 @@ class HomeLocalRepository {
   final box = Hive.box<SongModel>('songs');
 
   void uploadLocalSong(SongModel song) {
-    box.put(song.id, song);
+    try {
+      box.put(song.id, song);
+    } catch (e) {
+      print('Error uploading song locally: $e');
+    }
+
     print('Song uploaded locally: ${song.song_name}');
   }
 
